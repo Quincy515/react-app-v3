@@ -57,3 +57,7 @@ typings/
 # dotenv environment variables file
 .env
 
+# 打包生成的文件和代码编辑器文件不需要上传
+
+.idea/
+dist/
