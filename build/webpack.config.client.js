@@ -8,7 +8,7 @@ module.exports = {
   output: {
     filename: '[name].[hash].js',
     path: paths.appBuild,
-    publicPath: '',// paths.publicPath, // 静态资源文件引用时的路径
+    publicPath: '/public',// paths.publicPath, // 静态资源文件引用时的路径
   },
   module: {
     rules: [
@@ -26,6 +26,8 @@ module.exports = {
     ]
   },
   plugins: [
-    new HTMLPlugin()
+    new HTMLPlugin({
+      template: paths.appTemplateHtml
+    })
   ]
 }
