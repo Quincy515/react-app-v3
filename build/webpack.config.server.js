@@ -1,6 +1,7 @@
 const paths = require('./paths.js')
 
 module.exports = {
+  mode: 'none',
   target: 'node', // js 打包出来的内容是使用在哪个执行环境中的
   entry: {
     app: paths.appNodeJs
