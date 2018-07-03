@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-const path = require('path');
-const fs = require('fs');
+const path = require('path')
+const fs = require('fs')
 
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
@@ -14,4 +14,5 @@ module.exports = {
   appNodeJs: resolveApp('client/server-entry.js'), // server 打包 server-entry 文件的路径
   appTemplateHtml: resolveApp('client/template.html'), // template.html路径
   serverHtml: resolveApp('dist/index.html'), // 插入 template.html 生成的dist目录下的index.html路径
+  faviconPath: resolveApp('server/favicon.ico') // 图标地址
 }
