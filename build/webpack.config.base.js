@@ -5,6 +5,9 @@ module.exports = {
     path: paths.appBuild,
     publicPath: '/public/' // paths.publicPath, // 静态资源文件引用时的路径
   },
+  resolve: {
+    extensions: ['.js', '.jsx']
+  },
   module: {
     rules: [
       {
