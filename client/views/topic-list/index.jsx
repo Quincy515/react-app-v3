@@ -18,6 +18,15 @@ export default class TopicList extends React.Component {
     // do something here
   }
 
+  bootstrap() {
+    return new Promise((resolve) => { // 只需要 resolve 就可以，因为不会出现错误的内容
+      setTimeout(() => {
+        this.props.appState.count = 3
+        resolve(true) // 根据 true 来判断这个方法是否执行成功
+      })
+    })
+  }
+
   changeName(event) {
     // this.props.appState.name = event.target.value // 不建议这样修改变量，应该使用 action
     this.props.appState.changeName(event.target.value)
