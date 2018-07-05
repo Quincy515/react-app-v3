@@ -23,6 +23,7 @@ module.exports = function (req, res, next) {
   axios(`${baseUrl}${path}`, { // 请求地址是 baseUrl + path
     method: req.method, // 与客户端发送的请求方式相同
     params: query, // 请求参数
+    // {'accesstoken': 'xxx'} 通过 querystring 转化之后 'accesstoken=xxx'
     data: querystring.stringify(Object.assign({}, req.body, { // req的body加上accessToken就算不需要加上也没有关系
       accesstoken: (needAccessToken && req.method === 'POST') ? user.accessToken : '' // 传给 cnode api 的都是小写没有大写
     })), // 这样请求就发送到 cnode api 确保不同请求方法上都会有 accessToken

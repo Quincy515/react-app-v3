@@ -17,9 +17,9 @@ const getTemplate = () => { // 获取template
   })
 }
 
-let serverBundle
+let serverBundle, createStoreMap
 const Module = module.constructor // 通过构造方法创建一个新的 Module
-const mfs = new MemoryFs // 内存读写
+const mfs = new MemoryFs() // 内存读写
 const serverCompiler = webpack(serverConfig) // serverCompiler是webpack 提供的模块调用方式
 serverCompiler.outputFileSystem = mfs // 使用mfs加快打包速度
 serverCompiler.watch({}, (err, stats) => { // 每次 server bundle有更新都会watch，监听打包内容
@@ -37,6 +37,7 @@ serverCompiler.watch({}, (err, stats) => { // 每次 server bundle有更新都�
   const m = new Module() // 编译的内容是字符串，怎么改变为模块，内容和指定文件名
   m._compile(bundle, 'server-entry.js') // 用module解析string内容，生成一个新的模块,需要动态编译要指定文件名
   serverBundle = m.exports.default // 通过exports挂载从模块导出来获取 server bundle
+  createStoreMap = m.exports.createStoreMap
 })
 
 module.exports = function (app) {
@@ -48,7 +49,16 @@ module.exports = function (app) {
   app.get('*', function (req, res) {
     // 服务端渲染完成的结果返回给浏览器端
     getTemplate().then(template => {
-      const content = ReactDomServer.renderToString(serverBundle)
+      const routerContext = {}
+      const app = serverBundle(createStoreMap(), routerContext, req.url)
+
+      const content = ReactDomServer.renderToString(app)
+      // 在renderToString之后拿到 routerContext
+      if (routerContext.url) { // 判断routerContext有redirect情况下会增加URL属性
+        res.status(302).setHeader('Location', routerContext.url) // 重定向302头
+        res.end() // 结束请求 setHeader上增加属性，让浏览器自动跳转到routerContext.url
+        return // 不然会继续执行下面的代码
+      }
       res.send(template.replace('<!-- app -->', content))
     })
   })

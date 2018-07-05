@@ -5,7 +5,7 @@ import {
   action,
 } from 'mobx'
 
-export class AppState {
+export default class AppState {
   @observable count = 0
 
   @observable name = 'wangbadan'
@@ -22,16 +22,3 @@ export class AppState {
     this.name = name
   }
 }
-
-const appState = new AppState()
-
-// autorun(() => {
-//   console.log(appState.msg) // eslint-disable-line
-// })
-
-// setInterval(() => {
-//   // appState.count += 1
-//   appState.add()
-// }, 2000)
-
-export default appState

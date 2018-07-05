@@ -4,16 +4,16 @@ import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'mobx-react'
 import { AppContainer } from 'react-hot-loader' // eslint-disable-line
 import App from './views/App'
-import appState from './store/app-state'
+import AppState from './store/app-state' // 把 class 引入进来创建
 
 // ReactDOM.hydrate(<App />, document.getElementById('root'))
 
 const root = document.getElementById('root')
-const render = (Component) => {
+const render = (Component) => { // 使用appState={new AppState()}新建一个实例
   const renderMethod = module.hot ? ReactDOM.render : ReactDOM.hydrate
   renderMethod(
     <AppContainer>
-      <Provider appState={appState}>
+      <Provider appState={new AppState()}>
         <BrowserRouter>
           <Component />
         </BrowserRouter>
