@@ -40,6 +40,9 @@ if (isDev) { // 如果是开发环境，就增加一些开发配置
     publicPath: '/public/', // 需要和上面的webpack output设置相同
     historyApiFallback: { // 代理的目录是dist 下文件，消除 /public 的影响
       index: '/public/index.html'
+    },
+    proxy: {
+      '/api': 'http://localhost:3333'
     }
   }
   config.plugins.push(new webpack.HotModuleReplacementPlugin())
