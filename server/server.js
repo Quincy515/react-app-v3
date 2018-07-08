@@ -2,7 +2,7 @@ const express = require('express')
 const favicon = require('serve-favicon')
 const bodyParser = require('body-parser')
 const session = require('express-session')
-const ReactSSR = require('react-dom/server')
+const serverRender = require('./utils/server-render')
 const fs = require('fs')
 const paths = require('../build/paths.js')
 
@@ -26,17 +26,22 @@ app.use('/api/user', require('./utils/handle-login.js'))
 app.use('/api', require('./utils/proxy.js'))
 
 if (!isDev) { // 不是开发环境下，才会存在 dist 目录
-  const serverEntry = require('../dist/server-entry.js').default
-  const template = fs.readFileSync(paths.serverHtml, 'utf8') // 读入根据template.html模版生成在dist目录下的index.html
+  const serverEntry = require('../dist/server-entry.js')
+  const template = fs.readFileSync(paths.serverEjs, 'utf8') // 读入根据template.html模版生成在dist目录下的index.html
   app.use('/public', express.static(paths.appBuild)) // 静态文件都在dist目录下，静态文件代理
-  app.get('*', function (req, res) { // 服务端渲染完成的结果返回给浏览器端
-    const appString = ReactSSR.renderToString(serverEntry)
-    res.send(template.replace('<!-- app -->', appString))
+  app.get('*', function (req, res, next) { // 服务端渲染完成的结果返回给浏览器端
+    serverRender(serverEntry, template, req, res).catch(next)
   })
 } else { // 是开发环境，需要单独处理，内容比较多，单独写个文件utils/dev-static.js
   const devStatic = require('./utils/dev-static.js')
   devStatic(app)
 }
+
+// 增加 error 处理的中间件
+app.use(function (error, req, res, next) { // 会根据参数数量判断是否是 error handle 函数
+  console.error(error)
+  res.status(500).send(error)
+})
 
 app.listen(3333, function () {
   console.log('server is listening on 3333')

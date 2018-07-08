@@ -14,6 +14,7 @@ module.exports = {
   appNodeJs: resolveApp('client/server-entry.js'), // server 打包 server-entry 文件的路径
   appTemplateHtml: resolveApp('client/template.html'), // template.html路径
   serverHtml: resolveApp('dist/index.html'), // 插入 template.html 生成的dist目录下的index.html路径
+  serverEjs: resolveApp('dist/server.ejs'),
   faviconPath: resolveApp('server/favicon.ico'), // 图标地址
   serverTemplateEjs: resolveApp('client/server.template.ejs') // 服务端渲染插入动态数据的html
 }
