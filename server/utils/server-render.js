@@ -26,7 +26,7 @@ module.exports = (bundle, template, req, res) => {
         return // 不然会继续执行下面的代码
       }
 
-      const helmet = Helmet.rewind() // 调用这个方法 SEO title、meta、content信息
+      const helmet = Helmet.renderStatic() // 调用这个方法 SEO title、meta、content信息
       const state = getStoreState(stores) // 这个怎么让客户端代码拿到，可以把数据插入到html
       const content = ReactDomServer.renderToString(app)
       // 在renderToString之后拿到 routerContext
