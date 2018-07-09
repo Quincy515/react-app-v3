@@ -4,6 +4,11 @@ const bootstrapper = require('react-async-bootstrapper')
 const ReactDomServer = require('react-dom/server')
 const Helmet = require('react-helmet').default
 
+const SheetsRegistry = require('react-jss').SheetsRegistry
+const createGenerateClassName = require('@material-ui/core/styles').createGenerateClassName
+const createMuiTheme = require('@material-ui/core/styles').createMuiTheme
+const colors = require('@material-ui/core/colors')
+
 const getStoreState = (stores) => {
   return Object.keys(stores).reduce((result, storeName) => {
     result[storeName] = stores[storeName].toJson()
@@ -17,7 +22,16 @@ module.exports = (bundle, template, req, res) => {
     const createApp = bundle.default
     const routerContext = {}
     const stores = createStoreMap()
-    const app = createApp(stores, routerContext, req.url)
+    const sheetsRegistry = new SheetsRegistry() // 创建 Material-ui sheetsRegistry
+    const generateClassName = createGenerateClassName() // 创建 Material-ui generateClassName
+    const theme = createMuiTheme({ // 创建 Material-ui theme
+      palette: {
+        primary: colors.deepPurple,
+        accent: colors.lightBlue,
+        type: 'light'
+      }
+    }) // 需要的东西都创建完成了，传值给 app 渲染
+    const app = createApp(stores, routerContext, sheetsRegistry, generateClassName, theme, req.url)
 
     bootstrapper(app).then(() => { // 异步操作，可以获取到 routerContext
       if (routerContext.url) { // 判断routerContext有redirect情况下会增加URL属性
@@ -37,7 +51,9 @@ module.exports = (bundle, template, req, res) => {
         meta: helmet.meta.toString(),
         title: helmet.title.toString(),
         style: helmet.style.toString(),
-        link: helmet.link.toString()
+        link: helmet.link.toString(),
+        // 需要把 Material-ui 样式放入 template 里买呢
+        materialCss: sheetsRegistry.toString()
       })
       res.send(html)
       resolve() // 渲染成功之后就 resolve()
