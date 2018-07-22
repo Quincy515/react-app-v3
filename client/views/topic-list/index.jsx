@@ -8,6 +8,7 @@ import Helmet from 'react-helmet'
 import Button from '@material-ui/core/Button'
 // import { AppState } from '../../store/app-state'
 import { AppState } from '../../store/store'
+import yaklogo from '../../yaklogo.gif'
 
 @inject('appState') @observer
 export default class TopicList extends React.Component {
@@ -44,6 +45,8 @@ export default class TopicList extends React.Component {
         <Button variant="contained" color="primary">This is a button</Button>
         <input type="text" onChange={this.changeName} />
         <span>{this.props.appState.msg}</span>
+        <br />
+        <img src={yaklogo} alt="yaklogo" />
       </div>
     )
   }

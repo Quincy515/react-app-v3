@@ -7,6 +7,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { lightBlue, deepPurple } from '@material-ui/core/colors'
 import App from './views/App'
 import AppState from './store/app-state' // 把 class 引入进来创建
+import registerServiceWorker from './registerServiceWorker'
 
 const theme = createMuiTheme({ // 主题颜色
   palette: {
@@ -64,3 +65,5 @@ if (module.hot) {
     render(createApp(NextApp))
   })
 }
+
+registerServiceWorker()

@@ -8,12 +8,15 @@
   <%%- title %>
   <%%- link %>
   <%%- style %>
+  <link href='http://fonts.font.im/css?family=Bad+Script' rel='stylesheet' type='text/css'>
 
   <style id="jss-server-side">
+    h1 { font-family: 'Bad Script', cursive; }
     <%%- materialCss %>
   </style>
 </head>
 <body>
+  <h1>Hello Service Worker Cache!</h1>
   <div id="root"><%%- appString %></div>
   <script>
     window.__INITIAL__STATE__ = <%%- initialState %>
